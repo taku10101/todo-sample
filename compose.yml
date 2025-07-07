@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: todo-app
+      POSTGRES_U1SER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5444:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
