@@ -17,13 +17,13 @@ tech-select/
 ### 前提条件
 
 - Node.js >= 18.0.0
-- npm >= 8.0.0
+- pnpm >= 8.0.0
 
 ### インストール
 
 ```bash
 # プロジェクト全体の依存関係をインストール
-npm install
+pnpm install
 ```
 
 ## 📝 利用可能なコマンド
@@ -32,58 +32,58 @@ npm install
 
 ```bash
 # フロントエンド・バックエンドを同時起動
-npm run dev
+pnpm run dev
 
 # フロントエンドのみ起動
-npm run dev:frontend
+pnpm run dev:frontend
 
 # バックエンドのみ起動
-npm run dev:backend
+pnpm run dev:backend
 ```
 
 ### ビルド
 
 ```bash
 # 全体ビルド
-npm run build
+pnpm run build
 
 # フロントエンドのみビルド
-npm run build:frontend
+pnpm run build:frontend
 
 # バックエンドのみビルド
-npm run build:backend
+pnpm run build:backend
 ```
 
 ### データベース管理
 
 ```bash
 # マイグレーション実行
-npm run db:migrate
+pnpm run db:migrate
 
 # シードデータ投入
-npm run db:seed
+pnpm run db:seed
 
 # Prisma Studio起動
-npm run db:studio
+pnpm run db:studio
 
 # データベースリセット
-npm run db:reset
+pnpm run db:reset
 ```
 
 ### その他
 
 ```bash
 # 本番環境でバックエンド起動
-npm run start
+pnpm run start
 
 # 各プロジェクトのclean実行
-npm run clean
+pnpm run clean
 
 # フロントエンドのLint実行
-npm run lint
+pnpm run lint
 
 # テスト実行
-npm run test
+pnpm run test
 ```
 
 ## 🏗️ 技術スタック
@@ -103,7 +103,7 @@ npm run test
 
 ### 開発ツール
 
-- **npm workspaces** - モノレポ管理
+- **pnpm workspaces** - モノレポ管理
 - **concurrently** - 並行プロセス実行
 - **nodemon** - 開発サーバー自動再起動
 
@@ -134,15 +134,15 @@ DELETE /api/users/:id       - ユーザー削除
 1. **初期セットアップ**
 
    ```bash
-   npm install
-   npm run db:migrate
-   npm run db:seed
+   pnpm install
+   pnpm run db:migrate
+   pnpm run db:seed
    ```
 
 2. **開発開始**
 
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
    - フロントエンド: http://localhost:5173
@@ -151,11 +151,11 @@ DELETE /api/users/:id       - ユーザー削除
 3. **新機能開発**
    - フロントエンド: `frontend/src/` で作業
    - バックエンド: `backend/src/` で作業
-   - データベース変更: `backend/prisma/schema.prisma` を編集後 `npm run db:migrate`
+   - データベース変更: `backend/prisma/schema.prisma` を編集後 `pnpm run db:migrate`
 
 ## 📦 ワークスペース
 
-このプロジェクトは npm workspaces を使用してモノレポとして管理されています。
+このプロジェクトは pnpm workspaces を使用してモノレポとして管理されています。
 
 - **ルート**: 全体の設定とスクリプト管理
 - **frontend**: React アプリケーション

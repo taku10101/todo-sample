@@ -3,26 +3,23 @@
   "version": "1.0.0",
   "description": "Full-stack tech selection application",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:frontend": "npm run dev --workspace=frontend",
-    "dev:backend": "npm run dev --workspace=backend",
-    "build": "npm run build:backend && npm run build:frontend",
-    "build:frontend": "npm run build --workspace=frontend",
-    "build:backend": "npm run build --workspace=backend",
-    "start": "npm run start --workspace=backend",
-    "install:all": "npm install",
-    "clean": "npm run clean --workspace=frontend && npm run clean --workspace=backend",
-    "lint": "npm run lint --workspace=frontend",
-    "test": "npm run test --workspace=frontend && npm run test --workspace=backend",
-    "db:migrate": "npm run db:migrate --workspace=backend",
-    "db:seed": "npm run db:seed --workspace=backend",
-    "db:studio": "npm run db:studio --workspace=backend",
-    "db:reset": "npm run db:reset --workspace=backend"
+    "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "build": "pnpm run build:backend && pnpm run build:frontend",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "start": "pnpm --filter backend start",
+    "install:all": "pnpm install",
+    "clean": "pnpm --filter frontend clean && pnpm --filter backend clean",
+    "lint": "pnpm --filter frontend lint",
+    "test": "pnpm --filter frontend test && pnpm --filter backend test",
+    "db:migrate": "pnpm --filter backend db:migrate",
+    "db:seed": "pnpm --filter backend db:seed",
+    "db:studio": "pnpm --filter backend db:studio",
+    "db:reset": "pnpm --filter backend db:reset",
+    "db:generate": "pnpm --filter backend db:generate"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
@@ -33,12 +30,14 @@
     "react",
     "express",
     "prisma",
-    "monorepo"
+    "monorepo",
+    "pnpm"
   ],
   "author": "",
   "license": "ISC",
   "engines": {
     "node": ">=18.0.0",
-    "npm": ">=8.0.0"
-  }
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
 } 
