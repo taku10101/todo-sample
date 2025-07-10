@@ -1,0 +1,263 @@
+# Tech-Select Project - Cursor Rules
+# Ultra-thinking Development Guidelines
+
+## 🎯 Project Overview
+Tech-Select is a full-stack technology selection application built with:
+- **Frontend**: React 19 + TypeScript + Vite
+- **Backend**: Express + TypeScript + Prisma
+- **Package Manager**: pnpm workspace (monorepo)
+- **Database**: (Prisma ORM)
+
+## 🧠 Ultra-Think Philosophy
+- **Deep Analysis**: Always consider the broader implications of every code change
+- **Proactive Problem Solving**: Anticipate edge cases and potential issues before they occur
+- **Architectural Awareness**: Understand how each component fits into the larger system
+- **Performance Mindset**: Consider performance implications in every decision
+- **Security First**: Security considerations should be embedded in all development decisions
+
+## 📁 Project Structure
+```
+/
+├── frontend/           # React frontend application
+│   ├── src/
+│   │   ├── components/ # Reusable UI components
+│   │   ├── pages/      # Page-level components
+│   │   ├── hooks/      # Custom React hooks
+│   │   ├── services/   # API service layers
+│   │   ├── types/      # TypeScript type definitions
+│   │   ├── utils/      # Utility functions
+│   │   └── styles/     # Global styles and themes
+├── backend/            # Express backend API
+│   ├── src/
+│   │   ├── routes/     # API route handlers
+│   │   ├── lib/        # Core business logic
+│   │   ├── middleware/ # Express middleware
+│   │   ├── services/   # Business service layer
+│   │   ├── types/      # TypeScript type definitions
+│   │   └── utils/      # Utility functions
+│   └── prisma/         # Database schema and migrations
+```
+
+## 🎨 TypeScript Best Practices
+
+### Type Safety & Ultra-Thinking
+- **Strict Mode**: Always use strict TypeScript configuration
+- **Explicit Types**: Prefer explicit type annotations for public APIs
+- **Type Guards**: Use type guards for runtime type checking
+- **Generic Constraints**: Use generic constraints to express relationships
+- **Branded Types**: Use branded types for domain-specific values
+
+```typescript
+// ✅ Good: Explicit, safe, and clear
+interface UserService {
+  createUser(data: CreateUserRequest): Promise<User>;
+  getUser(id: UserId): Promise<User | null>;
+}
+
+// ✅ Ultra-think: Use branded types for important IDs
+type UserId = string & { readonly brand: unique symbol };
+type Email = string & { readonly brand: unique symbol };
+```
+
+### Error Handling Philosophy
+- **Result Pattern**: Use Result<T, E> pattern for operations that can fail
+- **Exhaustive Error Handling**: Handle all possible error states
+- **Contextual Errors**: Provide meaningful error messages with context
+
+```typescript
+// ✅ Ultra-think: Comprehensive error handling
+type Result<T, E = Error> = 
+  | { success: true; data: T }
+  | { success: false; error: E };
+
+async function createUser(data: CreateUserRequest): Promise<Result<User, UserCreationError>> {
+  // Implementation with comprehensive error handling
+}
+```
+
+## ⚛️ React Development Guidelines
+
+### Component Design Philosophy
+- **Single Responsibility**: Each component should have one clear purpose
+- **Composition over Inheritance**: Favor composition patterns
+- **Prop Interface Design**: Design props with future extensibility in mind
+- **Performance Optimization**: Use React.memo, useMemo, useCallback judiciously
+
+```typescript
+// ✅ Ultra-think: Extensible and performant component design
+interface UserCardProps {
+  user: User;
+  variant?: 'compact' | 'detailed';
+  actions?: React.ReactNode;
+  onUserClick?: (user: User) => void;
+  className?: string;
+}
+
+const UserCard = React.memo<UserCardProps>(({ 
+  user, 
+  variant = 'detailed',
+  actions,
+  onUserClick,
+  className 
+}) => {
+  // Implementation with performance considerations
+});
+```
+
+### State Management Philosophy
+- **Local State First**: Use local state unless data needs to be shared
+- **Custom Hooks**: Extract complex state logic into custom hooks
+- **State Normalization**: Normalize complex state structures
+- **Optimistic Updates**: Implement optimistic UI updates where appropriate
+
+### API Integration
+- **Service Layer**: Create dedicated service functions for API calls
+- **Loading States**: Handle loading, error, and success states comprehensively
+- **Caching Strategy**: Implement appropriate caching mechanisms
+- **Type Safety**: Ensure API responses match TypeScript interfaces
+
+```typescript
+// ✅ Ultra-think: Comprehensive API service with error handling
+interface UserApiService {
+  getUsers(): Promise<Result<User[], ApiError>>;
+  createUser(data: CreateUserRequest): Promise<Result<User, ApiError>>;
+  updateUser(id: UserId, data: UpdateUserRequest): Promise<Result<User, ApiError>>;
+}
+```
+
+## 🔧 Backend Development Guidelines
+
+### Express.js Best Practices
+- **Middleware Organization**: Organize middleware logically and document purposes
+- **Route Structure**: Use clear, RESTful route patterns
+- **Validation**: Validate all incoming data with comprehensive schemas
+- **Security**: Implement security headers, rate limiting, and input sanitization
+
+```typescript
+// ✅ Ultra-think: Comprehensive route handler with validation
+interface CreateUserRequest {
+  email: Email;
+  name: string;
+  preferences?: UserPreferences;
+}
+
+app.post('/api/users', 
+  validateSchema(createUserSchema),
+  authenticateUser,
+  rateLimit,
+  async (req: Request<{}, User, CreateUserRequest>, res: Response) => {
+    // Implementation with comprehensive error handling
+  }
+);
+```
+
+### Prisma Best Practices
+- **Schema Design**: Design database schemas with future scaling in mind
+- **Query Optimization**: Use select and include strategically
+- **Transaction Management**: Use transactions for multi-step operations
+- **Migration Strategy**: Write reversible migrations with data preservation
+
+```typescript
+// ✅ Ultra-think: Optimized Prisma queries with error handling
+async function getUserWithPosts(userId: UserId): Promise<Result<UserWithPosts, DatabaseError>> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        posts: {
+          select: {
+            id: true,
+            title: true,
+            createdAt: true,
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 10,
+        },
+      },
+    });
+
+    return user 
+      ? { success: true, data: user }
+      : { success: false, error: new UserNotFoundError(userId) };
+  } catch (error) {
+    return { success: false, error: new DatabaseError(error.message) };
+  }
+}
+```
+
+## 🔒 Security Guidelines
+- **Input Validation**: Validate and sanitize all user inputs
+- **Authentication**: Implement secure authentication mechanisms
+- **Authorization**: Implement role-based access control
+- **SQL Injection**: Use parameterized queries (Prisma handles this)
+- **CORS**: Configure CORS appropriately for your environment
+- **Environment Variables**: Use environment variables for sensitive data
+
+## 🚀 Performance Guidelines
+- **Database Queries**: Optimize database queries and use appropriate indexes
+- **Bundle Size**: Monitor and optimize frontend bundle size
+- **Caching**: Implement appropriate caching strategies
+- **Lazy Loading**: Use lazy loading for code and data where appropriate
+- **Memory Management**: Be mindful of memory usage and potential leaks
+
+## 🧪 Testing Philosophy
+- **Test Coverage**: Aim for meaningful test coverage, not just high percentages
+- **Integration Tests**: Focus on integration tests for critical user flows
+- **Unit Tests**: Write unit tests for complex business logic
+- **E2E Tests**: Implement end-to-end tests for critical user journeys
+- **Test Data**: Use factories and fixtures for test data management
+
+## 📝 Code Quality Standards
+
+### Naming Conventions
+- **Variables**: Use camelCase for variables and functions
+- **Constants**: Use UPPER_SNAKE_CASE for constants
+- **Types/Interfaces**: Use PascalCase for types and interfaces
+- **Files**: Use kebab-case for file names
+- **Components**: Use PascalCase for React components
+
+### Documentation Requirements
+- **Public APIs**: Document all public functions and interfaces
+- **Complex Logic**: Add comments explaining complex business logic
+- **Architecture Decisions**: Document important architectural decisions
+- **README Files**: Maintain up-to-date README files for each package
+
+### Git Workflow
+- **Commit Messages**: Use conventional commit format
+- **Branch Naming**: Use descriptive branch names (feature/, bugfix/, etc.)
+- **Pull Requests**: Provide detailed PR descriptions with context
+- **Code Reviews**: Conduct thorough code reviews with constructive feedback
+
+## 🎯 Ultra-Think Development Process
+1. **Understand the Problem**: Deeply understand the business requirements
+2. **Design First**: Design the solution before coding
+3. **Consider Edge Cases**: Think through potential edge cases and error scenarios
+4. **Security Review**: Consider security implications of each change
+5. **Performance Impact**: Evaluate performance implications
+6. **Testing Strategy**: Plan testing approach before implementation
+7. **Documentation**: Document decisions and complex logic
+8. **Future Maintenance**: Consider how the code will be maintained long-term
+
+## 📋 Code Review Checklist
+- [ ] Code follows TypeScript best practices
+- [ ] Error handling is comprehensive
+- [ ] Security considerations have been addressed
+- [ ] Performance implications have been considered
+- [ ] Tests cover the new functionality
+- [ ] Documentation is updated where necessary
+- [ ] Code is readable and maintainable
+- [ ] Edge cases have been considered
+- [ ] Database queries are optimized
+- [ ] API contracts are well-defined
+
+## 🔄 Continuous Improvement
+- **Regular Refactoring**: Regularly refactor code to maintain quality
+- **Technology Updates**: Stay current with technology updates
+- **Performance Monitoring**: Monitor application performance in production
+- **User Feedback**: Incorporate user feedback into development decisions
+- **Team Learning**: Share knowledge and best practices within the team
+
+Remember: Every line of code is an opportunity to demonstrate ultra-thinking. Consider not just what the code does, but how it fits into the larger system, how it might need to evolve, and how it impacts the user experience.
