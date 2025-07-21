@@ -3,7 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import prisma from './lib/prisma';
-import usersRouter from './routes/users';
+import userRoutes from './routes/userRoutes';
+import { swaggerUi, specs } from './config/swagger';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -44,8 +45,15 @@ app.get('/health', async (req, res) => {
   }
 });
 
+// Swagger UI設定
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Tech Select API Documentation',
+}));
+
 // APIルート設定
-app.use('/api/users', usersRouter);
+app.use('/api/users', userRoutes);
 
 // 404ハンドラー
 app.use('*', (req, res) => {
@@ -79,7 +87,9 @@ const server = app.listen(PORT, () => {
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📍 URL: http://localhost:${PORT}`);
   console.log(`🗃️  Database: SQLite`);
-  console.log(`📝 API Documentation:`);
+  console.log(`📚 Swagger UI: http://localhost:${PORT}/api-docs`);
+  console.log(`🏗️  Architecture: 3-Layer (Controller → Service → Repository)`);
+  console.log(`📝 API Endpoints:`);
   console.log(`   GET    /api/users      - 全ユーザー取得`);
   console.log(`   POST   /api/users      - ユーザー作成`);
   console.log(`   GET    /api/users/:id  - ユーザー詳細取得`);
